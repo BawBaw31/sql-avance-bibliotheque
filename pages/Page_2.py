@@ -6,4 +6,4 @@ st.set_page_config(
 
 a, b = st.columns([1.5, 4.5])
 
-a.title("Page 1")
+a.title("Page 2")

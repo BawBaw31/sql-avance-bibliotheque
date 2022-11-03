@@ -1,6 +1,5 @@
 import streamlit as st
 
-# Streamlit Frontend
 st.set_page_config(
     layout="wide",
 )
