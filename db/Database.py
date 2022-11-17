@@ -2,6 +2,8 @@ import datetime
 import psycopg2
 from .config import config
 
+from .entities.Membres import Membres
+
 
 class Database:
     def __init__(self):
@@ -40,16 +42,30 @@ class Database:
         self.cur.close()
         self.conn.close()
 
-    def creer_membre(self, nom: str, date_de_naissance: tuple[int, int, int], peut_emprunter: bool):
+    def login(self, nom: str):
         try:
-            self.cur.execute("INSERT INTO membres (nom, date_de_naissance, peut_emprunter) VALUES (%s, %s, %s)",
-                             (nom, datetime.date(date_de_naissance), peut_emprunter))
+            self.cur.execute("SELECT * FROM membres WHERE nom = %s", (nom,))
+            membre = Membres(*self.cur.fetchone())
+            self.cur.execute(
+                "SELECT * FROM roles WHERE id_membre = %s", (membre.id,))
+            for role in self.cur.fetchall():
+                membre.roles.append(role[0])
+            print(self.cur.fetchall())
+            return membre
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+
+    def creer_membre(self, nom: str, date_de_naissance: datetime.date):
+        try:
+            self.cur.execute("INSERT INTO membres (nom, date_de_naissance, peut_emprunter) VALUES (%s, %s, %s) RETURNING id",
+                             (nom, date_de_naissance, True))
             self.cur.execute("INSERT INTO roles (role, id_membre) VALUES (%s, %s)",
                              ("emprunteur", self.cur.fetchone()[0]))
             self.conn.commit()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
             self.conn.rollback()
+            raise error
 
     def test(self):
         print("test")
