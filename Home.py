@@ -1,5 +1,9 @@
 import streamlit as st
 
+from db.Database import Database
+
+db = Database()
+
 st.set_page_config(
     layout="wide",
 )
