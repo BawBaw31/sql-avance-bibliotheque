@@ -20,17 +20,7 @@
 #     MUSIQUE = 'Musique'
 #     LANGUES = 'Langues'
 
-Categories = [
+categories = [
     'Roman',
-    'Policier',
-    'Science Fiction',
-    'Historique',
-    'Fantastique',
-    'Horreur',
-    'Jeunesse',
-    'Documentaire',
-    'Biographie',
-    'Poésie',
-    'Théâtre',
-    'Philosophie',
+    'Policier'
 ]
