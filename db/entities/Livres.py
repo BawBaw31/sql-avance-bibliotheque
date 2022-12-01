@@ -63,7 +63,7 @@ class Livres:
                                (livre[2] - quantite, isbn))
                 db.conn.commit()
             else:
-                raise Exception("Ce livre n'est pas disponible")
+                raise Exception("Quantité insuffisante")
         except (Exception, DatabaseError) as error:
             db.conn.rollback()
             raise error

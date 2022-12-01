@@ -1,7 +1,7 @@
 import datetime
 
 
-class Membres(object):
+class Membres():
     id: int
     nom: str
     date_de_naissance: datetime.date

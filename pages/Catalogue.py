@@ -30,13 +30,17 @@ else:
 
     st.subheader("Emprunter un livre")
     isbn = st.number_input('ISBN (obligatoire)', step=1)
-    quantite = st.number_input('quantité', step=1, value=1)
+    quantite = st.number_input('Quantité', step=1, value=1)
 
     if st.button('Emprunter'):
         try:
-            Livres.emprunter_livres(db, st.session_state.membre, isbn, quantite)
-            st.success("Le livre a été emprunté")
+            Livres.emprunter_livres(
+                db, st.session_state.membre, isbn, quantite)
+            st.success(f"Le livre a été emprunté {quantite} fois")
         except (Exception) as e:
-            print(e)
-            st.error("Erreur lors de l'emprunt du livre")
-            st.info("Veuillez réessayer")
+            if "Quantité insuffisante" in str(e):
+                st.error("Ce livre n'est pas disponible en quantité suffisante")
+            else:
+                print(e)
+                st.error("Erreur lors de l'emprunt du livre")
+                st.info("Veuillez réessayer")
