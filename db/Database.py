@@ -2,8 +2,6 @@ import datetime
 
 import psycopg2
 
-from .entities.Livres import Livres
-
 from .config import config
 from .entities.Membres import Membres
 
@@ -64,20 +62,6 @@ class Database:
                              (nom, date_de_naissance, True))
             self.cur.execute("INSERT INTO roles (role, id_membre) VALUES (%s, %s)",
                              ("emprunteur", self.cur.fetchone()[0]))
-            self.conn.commit()
-        except (Exception, psycopg2.DatabaseError) as error:
-            print(error)
-            self.conn.rollback()
-            raise error
-
-    def ajouter_livres(self, livres: list[Livres]):
-        values = map(lambda x: (x.ISBN, x.titre, x.auteur,
-                     x.date_parution, x.edition, x.nom_categorie), livres)
-        try:
-            args = ','.join(self.cur.mogrify("(%s,%s,%s, %s, %s, %s, %s)", i).decode('utf-8')
-                            for i in values)
-            self.cur.execute(
-                "INSERT INTO livres (isbn, titre, auteur, date_parution, quantite_disponible, edition, nom_categorie) VALUES " + args)
             self.conn.commit()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
